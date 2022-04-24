@@ -1,0 +1,7 @@
+{
+  "a": 1,
+  "b": [1, 2, 3],
+  "name": "box_b",
+}
+
+# 将json文件中name为"box_b"的"rectangle"字段打印出来
