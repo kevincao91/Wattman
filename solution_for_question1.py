@@ -65,6 +65,8 @@ def patch_to_img(patch_img_file, background_img_file, box_b, mode='fill'):
                     [x1, y1, x2, y2]
     :return: None
     """
+    # NoneType assert
+    assert box_b is not None, "box_b is NoneType"
 
     # read images
     pt_img = cv2.imread(patch_img_file)
