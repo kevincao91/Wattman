@@ -22,13 +22,16 @@ sh ./solution_for_question2.sh
 ## Demo
 
 Below are results for question 1:
+```bssh
+box_b rectangle: {'left_top': [100, 100], 'right_bottom': [200, 300]}
+```
 
-resize mode "stretch fill"
+image show on resize mode "stretch fill"
 <div style="color:#0000FF" align="center">
 <img src="results/question1_fill.png" width="430"/>
 </div>
 
-resize mode "keep original proportion fill"
+image show on resize mode "keep original proportion fill"
 <div style="color:#0000FF" align="center">
 <img src="results/question1_orig.png" width="430"/>
 </div>
