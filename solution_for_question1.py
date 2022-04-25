@@ -8,6 +8,8 @@
 """
 
 # import some standard libraries
+import argparse
+import json
 import os
 
 # import some third party libraries
@@ -16,8 +18,38 @@ import cv2
 
 # coding here ======
 
-def read_json():
-    pass
+def read_json(json_file):
+    """
+    Print out the "rectangle" field with the name "box_b" in the json file,
+    and change the coordinate data structure from a dictionary to a list.
+    :param json_file: path to json file
+    :return: a list for bounding box coordinate.
+                    [x1, y1, x2, y2]
+            if parsing error returns None
+    """
+    # default return
+    rect = None
+
+    # read json file
+    assert os.path.exists(json_file), 'json file: {} does not exist'.format(json_file)
+    with open(json_file, 'r') as f:
+        data = json.load(f)
+
+    # get boxes info
+    if data['boxes']:
+        boxes_list = data['boxes']
+
+        # search box_b
+        for box in boxes_list:
+            name, rectangle = box['name'], box['rectangle']
+
+            if name == 'box_b':
+                print('box_b rectangle: {}'.format(rectangle))
+                # change the coordinate data structure from a dictionary to a list
+                if rectangle['left_top'] and rectangle['right_bottom']:
+                    rect = rectangle['left_top'] + rectangle['right_bottom']
+
+    return rect
 
 
 def patch_to_img(patch_img_file, background_img_file, box_b, mode='fill'):
@@ -85,6 +117,19 @@ def patch_to_img(patch_img_file, background_img_file, box_b, mode='fill'):
     cv2.destroyAllWindows()
 
 
+def parse_opt():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--json', type=str, default='question1/boxes.json', help='path to json')
+    parser.add_argument('--patch', type=str, default='question1/img_patch.jpg', help='path to patch image')
+    parser.add_argument('--background', type=str, default='question1/img_background.jpg',
+                        help='path to background image')
+    parser.add_argument('--mode', type=str, default='fill', help='patch image resize mode. fill or orig')
+    opt = parser.parse_args()
+    return opt
+
+
 # entrance =========
 if __name__ == '__main__':
-    patch_to_img('question1/img_patch.jpg', 'question1/img_background.jpg', [100, 100, 200, 200], 'fill')
+    args = parse_opt()
+    box_position = read_json(args.json)
+    patch_to_img(args.patch, args.background, box_position, args.mode)
